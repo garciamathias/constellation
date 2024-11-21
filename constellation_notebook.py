@@ -9,11 +9,16 @@ from openai import OpenAI
 from anthropic import Anthropic
 from mistralai import Mistral
 
+# Configuration des clés
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
+
 # Configuration des clients
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY")
-PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY")
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
+anthropic_client = Anthropic(api_key=ANTHROPIC_API_KEY)
+mistral_client = client = Mistral(api_key=MISTRAL_API_KEY)
 
 # Configuration de base du logging
 
@@ -241,6 +246,7 @@ def pipeline(input):
         try:
             # Appel direct à ChatGPT pour répondre au prompt
             response = chatgpt(input=input)
+            print(response)
             return response
         except Exception as e:
             raise ValueError(f"Erreur lors de la génération de réponse avec ChatGPT : {e}")

@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,20 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Constellation</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+   
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <!-- Marked pour le Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Highlight.js pour la coloration syntaxique -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+</head>
+
 </head>
 <body>
     <div class="chat-container">
-        <header>
-            <h1>Constellation Chat</h1>
-        </header>
-        <div class="chat-box" id="chat-box">
-            <!-- Messages seront ajoutés ici dynamiquement -->
+        <div class="chat-header">
+            <div class="logo">
+                <img src="/static/images/logo.png" alt="Logo Constellation">
+            </div>
         </div>
-        <form id="chat-form">
-            <input type="text" id="message-input" placeholder="Écrivez votre message..." required>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
+    
+        <div class="chat-main">
+            <div id="chat-box" class="chat-box"></div>
+            
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea id="message" placeholder="Écrivez votre message..."></textarea>
+                    <div class="input-buttons">
+                        <button id="send-button">
+                            <img src="/static/images/icons/send_icon.png" alt="Send">
+                        </button>
+                        <button id="attach-button">
+                            <img src="/static/images/icons/attachment-icon.png" alt="Attach">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Fermeture de chat-main -->
+    </div> <!-- Fermeture de chat-container -->
     <script src="/static/script.js"></script>
 </body>
 </html>
