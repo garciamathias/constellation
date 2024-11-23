@@ -42,7 +42,7 @@ body {
 .logo img {
     height: 70px;
     width: auto;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .chat-main {
@@ -104,8 +104,8 @@ textarea {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px; /* Augmenter le border-radius */
     padding: 15px 15px;
-    color: rgba(255, 255, 255, 0.9);
     resize: none;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 17px; /* Augmenter la taille de la police */
     min-height: 80px; /* Augmenter la hauteur minimale */
     max-height: 80px; /* Augmenter la hauteur minimale */
@@ -116,8 +116,8 @@ textarea {
 
 textarea:focus {
     outline: none;
-    background-color: rgba(32, 32, 32, 0.7);
-    border-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(32, 32, 32, 0.3);
+    border-color: rgba(255, 255, 255, 0.186);
 }
 
 textarea::placeholder {
@@ -286,37 +286,23 @@ button img {
 
 /* Styles pour les formules mathématiques */
 
-/* Styles pour KaTeX */
-.katex-display {
-    margin: 1.5em 0 !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0.5em 0;
-}
-
-.katex {
+/* Ajouter les styles MathJax */
+.mjx-chtml {
     font-size: 1.1em !important;
     color: rgba(255, 255, 255, 0.9) !important;
-    text-rendering: auto;
+    margin: 1em 0;
 }
 
-/* Pour les formules en ligne */
-.message.bot p .katex {
-    margin: 0 0.2em !important;
-}
-
-/* Pour les formules en bloc */
-.message.bot .katex-display > .katex {
-    text-align: center !important;
-    margin: 0.5em 0 !important;
-}
-
-/* Scroll horizontal pour les longues formules */
-.katex-display > .katex {
-    white-space: nowrap;
+.mjx-chtml.MJXc-display {
+    margin: 1.5em 0 !important;
+    padding: 0.5em 0;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 5px;
+}
+
+/* Style pour les formules en ligne */
+.message.bot p .mjx-chtml {
+    margin: 0 0.2em !important;
 }
 
 /* Amélioration du rendu des blocs de code */

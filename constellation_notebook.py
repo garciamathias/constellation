@@ -126,7 +126,7 @@ def perplexity(input, instructions=None):        #
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "llama-3.1-sonar-huge-128k-online",
+            "model": "llama-3.1-sonar-large-128k-online",
             "messages": [
                 {"role": "user", "content": input}
             ],
@@ -245,8 +245,7 @@ def pipeline(input):
     else:
         try:
             # Appel direct à ChatGPT pour répondre au prompt
-            response = chatgpt(input=input)
-            print(response)
+            response = chatgpt(input=input, instructions=None, model='gpt-4o-mini')
             return response
         except Exception as e:
             raise ValueError(f"Erreur lors de la génération de réponse avec ChatGPT : {e}")
