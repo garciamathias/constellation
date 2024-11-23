@@ -10,21 +10,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function addMessage(content, type) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-        
-        // Pour les réponses du bot, on utilise innerHTML pour que MathJax puisse traiter le LaTeX
+        messageDiv.className = `message-container ${type}-container`; // Nouveau conteneur
+    
         if (type === 'bot') {
-            messageDiv.innerHTML = content;
-            // Dire à MathJax de retraiter le contenu
-            MathJax.typesetPromise([messageDiv]);
-        } else {
-            // Pour les messages utilisateur, on garde textContent pour la sécurité
-            messageDiv.textContent = content;
+            const logoDiv = document.createElement('div');
+            logoDiv.className = 'message-logo';
+            const logoImg = document.createElement('img');
+            logoImg.src = '/static/images/logo.png';
+            logoImg.alt = 'Logo Constellation';
+            logoDiv.appendChild(logoImg);
+            messageDiv.appendChild(logoDiv);
         }
     
+        const contentDiv = document.createElement('div');
+        contentDiv.className = `message ${type}`;
+        
+        if (type === 'bot') {
+            contentDiv.innerHTML = content;
+            MathJax.typesetPromise([contentDiv]);
+        } else {
+            contentDiv.textContent = content;
+        }
+    
+        messageDiv.appendChild(contentDiv);
         chatBox.appendChild(messageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
+
     async function sendMessage() {
         const message = messageInput.value.trim();
         if (!message) return;

@@ -245,7 +245,7 @@ def pipeline(input):
     else:
         try:
             # Appel direct à ChatGPT pour répondre au prompt
-            response = chatgpt(input=input, instructions=None, model='gpt-4o-mini')
+            response = mistral(input=input, instructions=None, model='mistral-large-latest')
             return response
         except Exception as e:
             raise ValueError(f"Erreur lors de la génération de réponse avec ChatGPT : {e}")
