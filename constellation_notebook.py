@@ -226,16 +226,16 @@ def pipeline(input):
             # Appel à Perplexity pour récupérer les données du web
             data_web = perplexity(input)
 
-            # Création du contexte pour Mistral
+            # Création du contexte pour le model
             context = (
                 f"Voici le prompt de l'utilisateur : {input}\n"
-                f"Voici la sortie de Perplexity qui a fait la recherche sur internet : {data_web}\n"
+                f"Voici les informations trouvées sur internet par rapport au prompt de l'utilisateur : {data_web}\n"
                 "Réponds au prompt de l'utilisateur."
             )
 
-            # Utilisation de Mistral pour générer la réponse basée sur le contexte
+            # Utilisation d'un model pour générer la réponse basée sur le contexte
             try:
-                response = mistral(context)
+                response = chatgpt(context)
                 return response
             except Exception as e:
                 raise ValueError(f"Erreur lors de la génération de réponse avec Mistral : {e}")
@@ -245,7 +245,7 @@ def pipeline(input):
     else:
         try:
             # Appel direct à ChatGPT pour répondre au prompt
-            response = mistral(input=input, instructions=None, model='mistral-large-latest')
+            response = chatgpt(input=input)
             return response
         except Exception as e:
             raise ValueError(f"Erreur lors de la génération de réponse avec ChatGPT : {e}")

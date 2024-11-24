@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,30 +7,29 @@
     <link rel="stylesheet" href="/static/styles.css">
     <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
 
+    <!-- Configuration MathJax -->
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']],
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
             },
             svg: {
                 fontCache: 'global'
             },
             options: {
-                enableMenu: false // Désactive le menu contextuel
+                enableMenu: false
             }
         };
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-</head>
-
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
         </div>
-    
+        
         <div class="chat-main">
             <div id="chat-box" class="chat-box"></div>
             
@@ -48,8 +46,20 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- Fermeture de chat-main -->
-    </div> <!-- Fermeture de chat-container -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Configuration de Marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: false,
+            mangle: false
+        });
+    </script>
     <script src="/static/script.js"></script>
 </body>
 </html>

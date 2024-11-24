@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatBox = document.getElementById('chat-box');
     const messageInput = document.getElementById('message');
     const sendButton = document.getElementById('send-button');
+    marked.setOptions({
+        breaks: true, // Permet les retours à la ligne avec un seul \n
+        gfm: true, // Active GitHub Flavored Markdown
+        headerIds: false, // Désactive les IDs automatiques des titres
+        mangle: false, // Désactive la transformation des emails
+        sanitize: false, // Désactivé car nous gérons nous-mêmes le contenu
+    });
 
     function adjustTextareaHeight() {
         messageInput.style.height = 'auto';
@@ -10,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function addMessage(content, type) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message-container ${type}-container`; // Nouveau conteneur
+        messageDiv.className = `message-container ${type}-container`;
     
         if (type === 'bot') {
             const logoDiv = document.createElement('div');
@@ -26,8 +33,41 @@ document.addEventListener('DOMContentLoaded', function() {
         contentDiv.className = `message ${type}`;
         
         if (type === 'bot') {
-            contentDiv.innerHTML = content;
-            MathJax.typesetPromise([contentDiv]);
+            // 1. Protéger les blocs LaTeX
+            let protectedContent = content
+                // Protéger les blocs display math \[...\]
+                .replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
+                    return `@@LATEX_DISPLAY@@${encodeURIComponent(formula)}@@`;
+                })
+                // Protéger les blocs inline math \(...\)
+                .replace(/\\\(([\s\S]*?)\\\)/g, (match, formula) => {
+                    return `@@LATEX_INLINE@@${encodeURIComponent(formula)}@@`;
+                })
+                // Protéger les blocs $$...$$
+                .replace(/\$\$([\s\S]*?)\$\$/g, (match, formula) => {
+                    return `@@LATEX_DISPLAY@@${encodeURIComponent(formula)}@@`;
+                })
+                // Protéger les blocs $...$
+                .replace(/\$([\s\S]*?)\$/g, (match, formula) => {
+                    return `@@LATEX_INLINE@@${encodeURIComponent(formula)}@@`;
+                });
+    
+            // 2. Appliquer le rendu Markdown
+            let htmlContent = marked.parse(protectedContent);
+    
+            // 3. Restaurer les blocs LaTeX
+            htmlContent = htmlContent
+                .replace(/@@LATEX_DISPLAY@@(.*?)@@/g, (match, formula) => {
+                    return `\\[${decodeURIComponent(formula)}\\]`;
+                })
+                .replace(/@@LATEX_INLINE@@(.*?)@@/g, (match, formula) => {
+                    return `\\(${decodeURIComponent(formula)}\\)`;
+                });
+    
+            contentDiv.innerHTML = htmlContent;
+            
+            // 4. Appliquer le rendu LaTeX
+            await MathJax.typesetPromise([contentDiv]);
         } else {
             contentDiv.textContent = content;
         }
@@ -36,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chatBox.appendChild(messageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
+    
 
     async function sendMessage() {
         const message = messageInput.value.trim();
