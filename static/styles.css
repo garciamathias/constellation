@@ -367,3 +367,78 @@ button img {
 .user-container .message-logo {
     display: none;
 }
+
+/* Style des blocs de code */
+.code-block-wrapper {
+    position: relative;
+    margin: 1em 0;
+}
+
+.message.bot pre {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 1em;
+    margin: 0;
+    overflow-x: auto;
+}
+
+.message.bot pre code {
+    background: transparent;
+    padding: 0;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Style du bouton copier */
+.code-toolbar {
+    position: relative;
+}
+
+.toolbar-item button {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toolbar-item button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Animation de copie réussie */
+.toolbar-item button.success {
+    background: #198754;
+    border-color: #198754;
+}
+
+/* Amélioration de la lisibilité du code */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6a9955;
+}
+
+.token.function {
+    color: #dcdcaa;
+}
+
+.token.keyword {
+    color: #569cd6;
+}
+
+.token.string {
+    color: #ce9178;
+}
+
+.token.number {
+    color: #b5cea8;
+}
