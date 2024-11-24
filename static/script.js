@@ -35,28 +35,67 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'bot') {
             // 1. Protéger les blocs LaTeX
             let protectedContent = content
-                // Protéger les blocs display math \[...\]
                 .replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
                     return `@@LATEX_DISPLAY@@${encodeURIComponent(formula)}@@`;
                 })
-                // Protéger les blocs inline math \(...\)
                 .replace(/\\\(([\s\S]*?)\\\)/g, (match, formula) => {
                     return `@@LATEX_INLINE@@${encodeURIComponent(formula)}@@`;
                 })
-                // Protéger les blocs $$...$$
                 .replace(/\$\$([\s\S]*?)\$\$/g, (match, formula) => {
                     return `@@LATEX_DISPLAY@@${encodeURIComponent(formula)}@@`;
                 })
-                // Protéger les blocs $...$
                 .replace(/\$([\s\S]*?)\$/g, (match, formula) => {
                     return `@@LATEX_INLINE@@${encodeURIComponent(formula)}@@`;
                 });
     
             // 2. Appliquer le rendu Markdown
             let htmlContent = marked.parse(protectedContent);
+            
+            // 3. Créer un conteneur temporaire pour manipuler le HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlContent;
+            
+            // 4. Ajouter la classe de langage par défaut aux blocs sans langage spécifié
+            tempDiv.querySelectorAll('pre code:not([class*="language-"])').forEach(block => {
+                block.className = 'language-javascript';
+            });
+            
+            // 5. Ajouter un bouton de copie à chaque bloc de code
+            tempDiv.querySelectorAll('pre').forEach(pre => {
+                pre.classList.add('code-toolbar');
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                
+                // Créer le bouton de copie
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.textContent = 'Copier';
+                copyButton.onclick = async () => {
+                    const code = pre.querySelector('code').textContent;
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        copyButton.textContent = 'Copié !';
+                        copyButton.classList.add('success');
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copier';
+                            copyButton.classList.remove('success');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Erreur lors de la copie:', err);
+                        copyButton.textContent = 'Erreur';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copier';
+                        }, 2000);
+                    }
+                };
+                
+                wrapper.appendChild(copyButton);
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(pre);
+            });
     
-            // 3. Restaurer les blocs LaTeX
-            htmlContent = htmlContent
+            // 6. Restaurer les blocs LaTeX
+            htmlContent = tempDiv.innerHTML
                 .replace(/@@LATEX_DISPLAY@@(.*?)@@/g, (match, formula) => {
                     return `\\[${decodeURIComponent(formula)}\\]`;
                 })
@@ -66,8 +105,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
             contentDiv.innerHTML = htmlContent;
             
-            // 4. Appliquer le rendu LaTeX
+            // 7. Appliquer le rendu LaTeX
             await MathJax.typesetPromise([contentDiv]);
+            
+            // 8. Activer la coloration syntaxique
+            Prism.highlightAllUnder(contentDiv);
         } else {
             contentDiv.textContent = content;
         }
