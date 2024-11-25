@@ -366,6 +366,8 @@ button img {
 /* Cache le logo pour les messages utilisateur */
 .user-container .message-logo {
     display: none;
+    scroll-margin-top: 0 !important;
+    scroll-behavior: auto !important;
 }
 
 /* Style des blocs de code */
@@ -445,6 +447,7 @@ div.code-toolbar > .toolbar > .toolbar-item > button {
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     backdrop-filter: blur(8px);
     transition: all 0.2s ease !important;
+    text-decoration: none !important;
     cursor: pointer !important;
     box-shadow: none !important;
 }
@@ -471,4 +474,24 @@ div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy"] {
 
 div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy"] {
     animation: copyFeedback 0.3s ease;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button {
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > a {
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.toolbar-item button,
+.toolbar-item a {
+    pointer-events: auto !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state] {
+    scroll-behavior: auto !important;
+    scroll-margin: 0 !important;
 }
