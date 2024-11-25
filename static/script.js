@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 4. Ajout de la classe de langage par défaut
             tempDiv.querySelectorAll('pre code:not([class*="language-"])').forEach(block => {
-                block.className = 'language-javascript';
+                block.className = 'language-plaintext';
             });
             
             // 5. Traitement des blocs de code
