@@ -10,43 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
         mangle: false,
         sanitize: false,
     });
-
-    function createCopyButton(pre) {
-        const button = document.createElement('button');
-        button.className = 'copy-btn';
-        button.textContent = 'Copy';
-        button.style.position = 'absolute';
-        button.style.right = '8px';
-        button.style.top = '8px';
-        button.style.zIndex = '10';
-    
-        button.addEventListener('click', async () => {
-            try {
-                console.log('Bouton de copie cliqué');
-                const codeElement = pre.querySelector('code');
-                if (!codeElement) {
-                    console.error('Aucun élément <code> trouvé dans le bloc <pre>', pre);
-                    return;
-                }
-                
-                const code = codeElement.innerText.trim();
-                console.log('Code extrait pour copie:', code);
-    
-                await navigator.clipboard.writeText(code);
-                console.log('Code copié dans le presse-papier');
-                
-                button.textContent = 'Copied!';
-                setTimeout(() => {
-                    button.textContent = 'Copy';
-                }, 2000);
-            } catch (error) {
-                console.error('Erreur lors de la tentative de copie:', error);
-                alert('Une erreur est survenue lors de la copie. Vérifiez vos permissions ou le support du navigateur.');
-            }
-        });
-    
-        return button;
-    }
     
 
     function adjustTextareaHeight() {
@@ -110,9 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 pre.parentNode.insertBefore(wrapper, pre);
                 wrapper.appendChild(pre);
                 
-                // Ajouter le bouton de copie
-                const copyButton = createCopyButton(pre);
-                wrapper.appendChild(copyButton);
             });
     
             // 6. Restauration des blocs LaTeX
