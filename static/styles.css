@@ -395,30 +395,6 @@ button img {
     position: relative;
 }
 
-.toolbar-item button {
-    position: absolute;
-    top: 0.5em;
-    right: 0.5em;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.8);
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.toolbar-item button:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Animation de copie réussie */
-.toolbar-item button.success {
-    background: #198754;
-    border-color: #198754;
-}
-
 /* Amélioration de la lisibilité du code */
 .token.comment,
 .token.prolog,
@@ -441,4 +417,30 @@ button img {
 
 .token.number {
     color: #b5cea8;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copy-btn:hover {
+    background: #0056b3;
+}
+
+.copy-btn:active {
+    background: #004085;
+}
+
+.copy-btn:focus {
+    outline: none;
 }

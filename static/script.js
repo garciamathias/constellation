@@ -2,13 +2,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatBox = document.getElementById('chat-box');
     const messageInput = document.getElementById('message');
     const sendButton = document.getElementById('send-button');
+    
     marked.setOptions({
-        breaks: true, // Permet les retours à la ligne avec un seul \n
-        gfm: true, // Active GitHub Flavored Markdown
-        headerIds: false, // Désactive les IDs automatiques des titres
-        mangle: false, // Désactive la transformation des emails
-        sanitize: false, // Désactivé car nous gérons nous-mêmes le contenu
+        breaks: true,
+        gfm: true,
+        headerIds: false,
+        mangle: false,
+        sanitize: false,
     });
+
+    function createCopyButton(pre) {
+        const button = document.createElement('button');
+        button.className = 'copy-btn';
+        button.textContent = 'Copy';
+        button.style.position = 'absolute';
+        button.style.right = '8px';
+        button.style.top = '8px';
+        button.style.zIndex = '10';
+    
+        button.addEventListener('click', async () => {
+            try {
+                console.log('Bouton de copie cliqué');
+                const codeElement = pre.querySelector('code');
+                if (!codeElement) {
+                    console.error('Aucun élément <code> trouvé dans le bloc <pre>', pre);
+                    return;
+                }
+                
+                const code = codeElement.innerText.trim();
+                console.log('Code extrait pour copie:', code);
+    
+                await navigator.clipboard.writeText(code);
+                console.log('Code copié dans le presse-papier');
+                
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            } catch (error) {
+                console.error('Erreur lors de la tentative de copie:', error);
+                alert('Une erreur est survenue lors de la copie. Vérifiez vos permissions ou le support du navigateur.');
+            }
+        });
+    
+        return button;
+    }
+    
 
     function adjustTextareaHeight() {
         messageInput.style.height = 'auto';
@@ -33,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         contentDiv.className = `message ${type}`;
         
         if (type === 'bot') {
-            // 1. Protéger les blocs LaTeX
+            // 1. Protection des blocs LaTeX
             let protectedContent = content
                 .replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
                     return `@@LATEX_DISPLAY@@${encodeURIComponent(formula)}@@`;
@@ -48,53 +87,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     return `@@LATEX_INLINE@@${encodeURIComponent(formula)}@@`;
                 });
     
-            // 2. Appliquer le rendu Markdown
+            // 2. Rendu Markdown
             let htmlContent = marked.parse(protectedContent);
             
-            // 3. Créer un conteneur temporaire pour manipuler le HTML
+            // 3. Création du conteneur temporaire
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlContent;
             
-            // 4. Ajouter la classe de langage par défaut aux blocs sans langage spécifié
+            // 4. Ajout de la classe de langage par défaut
             tempDiv.querySelectorAll('pre code:not([class*="language-"])').forEach(block => {
                 block.className = 'language-javascript';
             });
             
-            // 5. Ajouter un bouton de copie à chaque bloc de code
+            // 5. Traitement des blocs de code
             tempDiv.querySelectorAll('pre').forEach(pre => {
-                pre.classList.add('code-toolbar');
+                // Créer le wrapper
                 const wrapper = document.createElement('div');
                 wrapper.className = 'code-block-wrapper';
+                wrapper.style.position = 'relative';
                 
-                // Créer le bouton de copie
-                const copyButton = document.createElement('button');
-                copyButton.className = 'copy-button';
-                copyButton.textContent = 'Copier';
-                copyButton.onclick = async () => {
-                    const code = pre.querySelector('code').textContent;
-                    try {
-                        await navigator.clipboard.writeText(code);
-                        copyButton.textContent = 'Copié !';
-                        copyButton.classList.add('success');
-                        setTimeout(() => {
-                            copyButton.textContent = 'Copier';
-                            copyButton.classList.remove('success');
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Erreur lors de la copie:', err);
-                        copyButton.textContent = 'Erreur';
-                        setTimeout(() => {
-                            copyButton.textContent = 'Copier';
-                        }, 2000);
-                    }
-                };
-                
-                wrapper.appendChild(copyButton);
+                // Déplacer le pre dans le wrapper
                 pre.parentNode.insertBefore(wrapper, pre);
                 wrapper.appendChild(pre);
+                
+                // Ajouter le bouton de copie
+                const copyButton = createCopyButton(pre);
+                wrapper.appendChild(copyButton);
             });
     
-            // 6. Restaurer les blocs LaTeX
+            // 6. Restauration des blocs LaTeX
             htmlContent = tempDiv.innerHTML
                 .replace(/@@LATEX_DISPLAY@@(.*?)@@/g, (match, formula) => {
                     return `\\[${decodeURIComponent(formula)}\\]`;
@@ -105,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
             contentDiv.innerHTML = htmlContent;
             
-            // 7. Appliquer le rendu LaTeX
+            // 7. Rendu LaTeX
             await MathJax.typesetPromise([contentDiv]);
             
-            // 8. Activer la coloration syntaxique
+            // 8. Coloration syntaxique
             Prism.highlightAllUnder(contentDiv);
         } else {
             contentDiv.textContent = content;
@@ -118,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
         chatBox.appendChild(messageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
-    
 
     async function sendMessage() {
         const message = messageInput.value.trim();
@@ -178,6 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
         subtree: true
     });
 
-    // Ajuster la hauteur initiale du textarea
+    // Ajustement initial du textarea
     adjustTextareaHeight();
 });
