@@ -10,7 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
         mangle: false,
         sanitize: false,
     });
-    
+
+    // Empêcher le défilement lors du clic sur le bouton copier
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.toolbar-item button') || e.target.closest('.toolbar-item button')) {
+            e.preventDefault();
+        }
+    });
 
     function adjustTextareaHeight() {
         messageInput.style.height = 'auto';
@@ -147,7 +153,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Observer pour le scroll automatique
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length) {
+            // Vérifier si la mutation concerne l'ajout d'un message et non un changement d'état du bouton copier
+            if (mutation.addedNodes.length && mutation.addedNodes[0].classList && 
+                mutation.addedNodes[0].classList.contains('message-container')) {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         });
