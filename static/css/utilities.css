@@ -1,0 +1,70 @@
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+/* Theme switcher */
+.theme-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.theme-switcher img {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}
+
+/* Message actions */
+.message-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    opacity: 0.6;
+}
+
+.message-actions img {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    filter: invert(1);
+}
+
+button {
+    background: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+button img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+}
+
+.input-actions {
+    position: absolute;
+    right: calc(20% + 15px);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
