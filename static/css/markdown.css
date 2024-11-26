@@ -1,0 +1,45 @@
+/* Style pour les éléments Markdown */
+.message.bot p {
+    margin: 0.5em 0;
+}
+
+.message.bot strong {
+    font-weight: 600;
+}
+
+.message.bot em {
+    font-style: italic;
+}
+
+.message.bot code {
+    background-color: rgba(40, 40, 40, 0.5);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+.message.bot pre {
+    background-color: rgba(40, 40, 40, 0.5);
+    padding: 1em;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+/* Style des blocs de code */
+.code-block-wrapper {
+    position: relative;
+    margin: 1em 0;
+}
+
+.message.bot pre code {
+    background: transparent;
+    padding: 0;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.code-toolbar {
+    position: relative;
+}

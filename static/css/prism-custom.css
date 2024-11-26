@@ -1,0 +1,85 @@
+/* Style personnalisé pour Prism.js */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6a9955;
+}
+
+.token.function {
+    color: #dcdcaa;
+}
+
+.token.keyword {
+    color: #569cd6;
+}
+
+.token.string {
+    color: #ce9178;
+}
+
+.token.number {
+    color: #b5cea8;
+}
+
+pre[class*="language-"] {
+    position: relative;
+}
+
+div.code-toolbar > .toolbar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 1 !important;
+    transition: none;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy"] {
+    background-color: rgba(46, 160, 67, 0.2) !important;
+    border-color: rgba(46, 160, 67, 0.4) !important;
+    color: rgba(46, 160, 67, 1) !important;
+    animation: copyFeedback 0.3s ease;
+}
+
+@keyframes copyFeedback {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button,
+div.code-toolbar > .toolbar > .toolbar-item > a {
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.toolbar-item button,
+.toolbar-item a {
+    pointer-events: auto !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state] {
+    scroll-behavior: auto !important;
+    scroll-margin: 0 !important;
+}

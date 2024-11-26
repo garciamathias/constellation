@@ -1,0 +1,18 @@
+/* Styles pour les formules mathématiques */
+.mjx-chtml {
+    font-size: 1.1em !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin: 1em 0;
+}
+
+.mjx-chtml.MJXc-display {
+    margin: 1.5em 0 !important;
+    padding: 0.5em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Style pour les formules en ligne */
+.message.bot p .mjx-chtml {
+    margin: 0 0.2em !important;
+}
