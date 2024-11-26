@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from constellation_notebook import pipeline
+from python.pipeline import pipeline
 
 app = Flask(__name__)
 
