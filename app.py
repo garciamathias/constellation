@@ -16,7 +16,7 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Message vide'}), 400
         
-        response = pipeline(user_message)
+        response = chatgpt(user_message)
         return jsonify({'response': response})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -4,6 +4,10 @@ import { setupTextareaHandlers } from './ui/textarea.js';
 import { addMessage, renderStreamingChunk } from './ui/messageUI.js';
 import { setupScrollObserver } from './observers/scrollObserver.js';
 
+function isUserAtBottom(element, threshold = 100) {
+    return element.scrollHeight - element.clientHeight - element.scrollTop <= threshold;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Configuration initiale
     configureMarked();
@@ -43,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let accumulatedText = '';
         let lastRenderTime = 0;
         const minRenderInterval = 100; // ms
+        let wasAtBottom = true; // Track initial scroll position
 
         try {
             const response = await fetch('/stream', {
@@ -68,9 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         const currentTime = Date.now();
                         if (currentTime - lastRenderTime >= minRenderInterval) {
+                            wasAtBottom = isUserAtBottom(elements.chatBox); // Check before rendering
                             await renderStreamingChunk(responseDiv, accumulatedText);
                             lastRenderTime = currentTime;
-                            elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
+                            
+                            // Only scroll if user was already at bottom
+                            if (wasAtBottom) {
+                                elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
+                            }
                         }
                     }
                 }
@@ -78,8 +88,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Rendu final pour s'assurer que tout le contenu est affiché
             if (accumulatedText) {
+                wasAtBottom = isUserAtBottom(elements.chatBox);
                 await renderStreamingChunk(responseDiv, accumulatedText);
-                elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
+                if (wasAtBottom) {
+                    elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
+                }
             }
 
         } catch (error) {
