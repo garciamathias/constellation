@@ -14,7 +14,7 @@ def chatgpt(input, context=None, instructions=None, model='gpt-4o', streaming=Fa
         logging.info(f"Context reçu: {json.dumps(context, indent=2) if context else 'Aucun contexte'}")
 
         # Construire le message system
-        system_message = {"role": "system", "content": "You are Constellation, a helpful assistant."}
+        system_message = {"role": "system", "content": "You are Constellation, a helpful assistant created by Mathias Garcia."}
         if instructions:
             system_message["content"] += f" Tu vas respecter radicalement ces instructions : {instructions}"
 
