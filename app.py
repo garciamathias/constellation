@@ -16,7 +16,7 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Message vide'}), 400
         
-        response = pipeline(user_message)
+        response = chatgpt(user_message)
         return jsonify({'response': response})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -26,21 +26,27 @@ def stream():
     try:
         data = request.json
         prompt = data.get('prompt')
+        context = data.get('context', [])
+        
+        # Garder uniquement ce log principal
+        app.logger.info(f"Context length: {len(context)}")
+        
         if not prompt:
             return jsonify({'error': 'Message vide'}), 400
         
         def generate():
             try:
-                for chunk in chatgpt(prompt, streaming=True):
+                for chunk in chatgpt(prompt, context=context, streaming=True):
                     if chunk:
                         yield f"data: {json.dumps({'chunk': chunk})}\n\n"
             except Exception as e:
-                # Log l'erreur et envoie un message d'erreur au client
+                # Garder les logs d'erreur
                 app.logger.error(f"Streaming error: {str(e)}")
                 yield f"data: {json.dumps({'error': str(e)})}\n\n"
         
         return Response(generate(), mimetype='text/event-stream')
     except Exception as e:
+        # Garder les logs d'erreur
         app.logger.error(f"Stream initialization error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 

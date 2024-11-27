@@ -1,27 +1,47 @@
 import logging
 import requests
+import json
 from .config import openai_client
 
-def chatgpt(input, instructions=None, model='gpt-4o', streaming=False):
+def chatgpt(input, context=None, instructions=None, model='gpt-4o', streaming=False):
     if not isinstance(input, str):
         logging.error("Le prompt doit être une chaîne de caractères.")
         return "Le prompt doit être une chaîne de caractères."
 
     try:
-        logging.info(f"Envoi de la requête à ChatGPT avec le modèle {model}.")
+        # Garder uniquement ce log initial
+        logging.info(f"Traitement de la requête avec le modèle {model}")
+        logging.info(f"Context reçu: {json.dumps(context, indent=2) if context else 'Aucun contexte'}")
 
-        # Construire le message system avec les instructions si elles existent
-        system_content = "You are Constellation, a helpful assistant."
+        # Construire le message system
+        system_message = {"role": "system", "content": "You are Constellation, a helpful assistant."}
         if instructions:
-            system_content += f" Tu vas respecter radicalement ces instructions : {instructions}"
+            system_message["content"] += f" Tu vas respecter radicalement ces instructions : {instructions}"
+
+        # Préparer les messages avec le contexte
+        messages = [system_message]
+        if context:
+            # Supprimer les logs de debug du traitement
+            simplified_context = []
+            for msg in context:
+                text = msg['content'][0]['text'] if isinstance(msg['content'], list) else msg['content']
+                simplified_context.append({
+                    "role": msg['role'],
+                    "content": text
+                })
+            messages.extend(simplified_context)
+
+        messages.append({
+            "role": "user",
+            "content": input
+        })
+
+        logging.info(f"Messages finaux envoyés à OpenAI: {json.dumps(messages, indent=2)}")
 
         # Envoyer la requête au modèle
         response = openai_client.chat.completions.create(
             model=model,
-            messages=[
-                {"role": "system", "content": system_content},
-                {"role": "user", "content": input}
-            ],
+            messages=messages,
             stream=streaming
         )
 
