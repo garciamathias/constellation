@@ -75,6 +75,18 @@ function addCodeWrappers(tempDiv) {
  */
 async function renderBotMessage(contentDiv, content) {
     try {
+        await renderStreamingChunk(contentDiv, content);
+    } catch (error) {
+        console.error('Error rendering bot message:', error);
+        contentDiv.textContent = 'Une erreur est survenue lors du rendu du message.';
+    }
+}
+
+/**
+ * Effectue le rendu en temps réel d'un chunk de texte
+ */
+export async function renderStreamingChunk(contentDiv, content) {
+    try {
         const sanitizedContent = sanitizeMarkdown(content);
         const protectedContent = protectLatexFormulas(sanitizedContent);
         const htmlContent = marked.parse(protectedContent);
@@ -91,13 +103,11 @@ async function renderBotMessage(contentDiv, content) {
         if (containsLatex(content)) {
             await renderMathJax(contentDiv);
         }
-
         if (containsCodeBlocks(content)) {
             Prism.highlightAllUnder(contentDiv);
         }
     } catch (error) {
-        console.error('Error rendering bot message:', error);
-        contentDiv.textContent = 'Une erreur est survenue lors du rendu du message.';
+        console.error('Error rendering stream chunk:', error);
     }
 }
 
