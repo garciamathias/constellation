@@ -59,7 +59,11 @@ div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy"] {
     background-color: rgba(46, 160, 67, 0.2) !important;
     border-color: rgba(46, 160, 67, 0.4) !important;
     color: rgba(46, 160, 67, 1) !important;
-    animation: copyFeedback 0.3s ease;
+}
+
+/* Nouvelle classe pour l'animation */
+div.code-toolbar > .toolbar > .toolbar-item > button.copy-animation {
+    animation: copyFeedback 0.3s ease forwards;
 }
 
 @keyframes copyFeedback {
