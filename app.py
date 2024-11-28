@@ -28,10 +28,11 @@ def stream():
         prompt = data.get('prompt')
         context = data.get('context', [])
         
-        # Garder uniquement ce log principal
+        app.logger.info(f"Nouvelle requête stream - Prompt: {prompt}")
         app.logger.info(f"Context length: {len(context)}")
         
         if not prompt:
+            app.logger.error("Prompt vide reçu")
             return jsonify({'error': 'Message vide'}), 400
         
         def generate():
@@ -40,15 +41,13 @@ def stream():
                     if chunk:
                         yield f"data: {json.dumps({'chunk': chunk})}\n\n"
             except Exception as e:
-                # Garder les logs d'erreur
                 app.logger.error(f"Streaming error: {str(e)}")
                 yield f"data: {json.dumps({'error': str(e)})}\n\n"
         
         return Response(generate(), mimetype='text/event-stream')
     except Exception as e:
-        # Garder les logs d'erreur
         app.logger.error(f"Stream initialization error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

@@ -3,16 +3,14 @@ import requests
 import json
 from .config import openai_client
 
-def chatgpt(input, context=None, instructions=None, model='gpt-4o', streaming=False):
+def chatgpt(input, context=None, instructions=None, model='gpt-4', streaming=False):
+    logging.info(f"=== Nouvelle requête ChatGPT - Prompt: {input} ===")
+    
     if not isinstance(input, str):
         logging.error("Le prompt doit être une chaîne de caractères.")
         return "Le prompt doit être une chaîne de caractères."
 
     try:
-        # Garder uniquement ce log initial
-        logging.info(f"Traitement de la requête avec le modèle {model}")
-        logging.info(f"Context reçu: {json.dumps(context, indent=2) if context else 'Aucun contexte'}")
-
         # Construire le message system
         system_message = {"role": "system", "content": "You are Constellation, a helpful assistant created by Mathias Garcia."}
         if instructions:
@@ -20,23 +18,24 @@ def chatgpt(input, context=None, instructions=None, model='gpt-4o', streaming=Fa
 
         # Préparer les messages avec le contexte
         messages = [system_message]
+        
+        # Traiter le contexte si présent
         if context:
-            # Supprimer les logs de debug du traitement
-            simplified_context = []
             for msg in context:
-                text = msg['content'][0]['text'] if isinstance(msg['content'], list) else msg['content']
-                simplified_context.append({
+                content = msg['content'][0]['text'] if isinstance(msg['content'], list) else msg['content']
+                messages.append({
                     "role": msg['role'],
-                    "content": text
+                    "content": content
                 })
-            messages.extend(simplified_context)
 
-        messages.append({
-            "role": "user",
-            "content": input
-        })
+        # Ajouter le prompt actuel seulement s'il n'est pas déjà le dernier message
+        if not messages[-1]['content'] == input:
+            messages.append({
+                "role": "user",
+                "content": input
+            })
 
-        logging.info(f"Messages finaux envoyés à OpenAI: {json.dumps(messages, indent=2)}")
+        logging.info(f"Messages envoyés: {len(messages)}")
 
         # Envoyer la requête au modèle
         response = openai_client.chat.completions.create(
